@@ -1,0 +1,93 @@
+/* common */
+.first-item {
+	margin-left: 0 !important;
+}
+.last-item {
+	margin-right: 0 !important;
+}
+/* slider */
+.mui-slider-wrapper.a.h {
+	position: relative;
+	overflow: hidden;
+	width: 1200px;
+	height: 300px;
+	margin: 0 auto;
+	padding: 0;
+
+	.mui-slider-content {
+
+		position: absolute;
+		left: 0;
+		top: 0;
+		.mui-slider-group {
+
+			float: left;
+			overflow: hidden;
+			.mui-slider-item {
+				position: relative;
+				float: left;
+				overflow: hidden;
+				.mui-slider-item-image {
+					display: block;
+				}
+				.mui-slider-item-caption {
+					position: absolute;
+				}
+			}
+		}
+
+
+	}
+
+	.mui-slider-thumb-wrapper {
+
+		.mui-slider-thumb-item {
+
+		}
+	}
+
+	.mui-slider-dots-wrapper {
+		overflow: hidden;
+		position: absolute;
+		.mui-slider-dots-item {
+			&:first-of-type {
+				background-color: #0082f0;
+			}
+			width: 20px;
+			height: 20px;
+			float: left;
+			background: #000;
+			border-radius: 10px;
+			margin-right: 5px;
+			cursor: pointer;
+		}
+	}
+
+
+	.mui-slider-navcontrol-back {
+		position: absolute;
+		width: 60px;
+		height: 60px;
+		top: 0;
+		left: 0;
+		cursor: pointer;
+		background: url(images/icon_prev.png) top center no-repeat;
+	}
+	.mui-slider-navcontrol-forward {
+		position: absolute;
+		width: 60px;
+		height: 60px;
+		top: 0;
+		left: 0;
+		cursor: pointer;
+		background: url(images/icon_next.png) top center no-repeat;
+	}
+
+
+
+
+
+}
+
+
+

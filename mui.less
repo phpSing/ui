@@ -1,10 +1,27 @@
+/* DOC */
+.navigation {
+	& a:active,
+	& a:focus,
+	& a:hover {
+		transition: all ease .3s;
+		color: #fff;
+		background: #c7254e;
+	}
+	position: fixed;
+	top: 18em;
+	left: 1em;
+}
 /* common */
+@blue : #0082f0;
 .first-item {
 	margin-left: 0 !important;
 }
 .last-item {
 	margin-right: 0 !important;
 }
+
+
+
 /* slider */
 .mui-slider-wrapper.a.h {
 	position: relative;
@@ -82,12 +99,52 @@
 		cursor: pointer;
 		background: url(images/icon_next.png) top center no-repeat;
 	}
-
-
-
-
-
 }
+
+/*
+*
+*	dialog
+*
+*/
+.mui-dialog-mask {
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	background: #000;
+	opacity: 0.6;
+	z-index: 2000;
+	top: 0;
+	left: 0;
+}
+.mui-dialog-wrapper {
+	border-radius: 5px;
+	box-shadow: 0 0 8px rgba(0,0,0,.5);
+	position: fixed;
+	background: #fff;
+	z-index: 3000;
+	left: 35%;
+	top: 35%;
+		.mui-dialog-title {
+			cursor: move;
+			font-size: 16px;
+			line-height: 16px;
+			padding: 10px 30px;
+			color: #666;
+			border-bottom: 2px solid @blue;
+			.mui-dialog-close{
+				display: inline-block;
+				float: right;
+				width: 16px;
+				cursor: pointer;
+				height: 16px;
+				background: url('/data/afficheimg/base.gif') 0 0 no-repeat;
+			}
+		}
+		.mui-dialog-body {
+			padding: 10px 30px;
+		}
+}
+
 
 
 

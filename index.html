@@ -1,7 +1,9 @@
 <!doctype html>
 <html>
 <head>
+	<meta charset="utf-8">
 	<title>mui</title>
+	<link rel="stylesheet" type="text/css" href="bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="mui.css">
 	<script type="text/javascript" src="jquery.min.js"></script>
 	<script type="text/javascript" src="mui.js"></script>
@@ -9,75 +11,320 @@
 <body>
 <div class="container">
 
-	<div slider slider-width="1200" slider-height="500" >
-		<!--  each DOM here is a slider item  -->
-		<div>
-			<a src="images/Avent.jpg" href="" target="_blank"></a>
-			<div caption>some caption here</div>
-		</div>
 
-		<div>
-			<a src="images/Badger.jpg" href="" target="_blank"></a>
-			<div caption>some caption here</div>
-		</div>
+<div class="navigation list-group hidden-sm hidden-xs">
+	<a href="#mui-slider" class="list-group-item">slider 轮播图</a>
+	<a href="#mui-dialog" class="list-group-item">dialog 对话框</a>
+	<a href="#mui-ajax" class="list-group-item">ajax 链接</a>
+	<a href="#mui-profile" class="list-group-item">profile 名片信息</a>
+	<a href="#mui-alert" class="list-group-item">alert 提示框</a>
+	<a href="#mui-button" class="list-group-item">button 按键</a>
+	<a href="#mui-form" class="list-group-item">form 表单</a>
+</div>
 
-		<div>
-			<a src="images/Child-Life.jpg" href="" target="_blank"></a>
-			<div caption>some caption here</div>
-		</div>
 
-		<div>
-			<a src="images/Earth-Mama.jpg" href="" target="_blank"></a>
-			<div caption>some caption here</div>
-		</div>
 
-		<div>
-			<a src="images/Gerber.jpg" href="" target="_blank"></a>
-			<div caption>some caption here</div>
-		</div>
+<!--  START slider  -->
+<div class="mui-type row" id="mui-slider">
 
-		<div>
-			<a src="images/Nestle.jpg" href="" target="_blank"></a>
-			<div caption>some caption here</div>
-		</div>								
+	<div class="row">	
+		<div class="col-md-3"><h2>Slider <small>轮播图UI自动初始化</small></h2></div>
+		<div class="col-md-9"><a href="/"><img src="/themes/68ecshopcom_jumei/images/new/logo.png"></a></div>
+		
+	</div>
+
+
+	<div class="mui-doc row">
+		<!--  使用  -->
+		<h3> 使用 <small> Usage</small></h3>
+		<dl class="dl-horizontal">
+			<dt>全局调用</dt>
+			<dd><code>$(this).mui_slider({obj, callback});</code></dd>
+		</dl>
+		<dl class="dl-horizontal">
+			<dt>DOM构成(至少)</dt>
+			<dd>
+<pre>
+&lt;div slider&gt;
+	&lt;div&gt;
+		&lt;a href="图要去的地方" src="图片路径" target="_blank"&gt;&lt;/a&gt;
+		&lt;div caption&gt;图片描述&lt;/div&gt;
+	&lt;/div&gt;
+&lt;/div&gt;
+</pre>
+			</dd>
+		</dl>
+
+		<!--  参数  -->
+		<h3> 参数设置 <small> Setting</small></h3>
+
+		<dl class="dl-horizontal">
+		  <dt>参数名</dt>
+		  <dd>值</dd>
+		</dl>
+		<dl class="dl-horizontal">
+		  <dt>slider</dt>
+		  <dd>
+		  	<p>初始化属性，赋值可选，设置不同样式</p>
+		  	<kbd>a-z</kbd>
+		  	<code>必须</code>
+		  </dd>
+		</dl>
+		<dl class="dl-horizontal">
+		  <dt>slider-width</dt>
+		  <dd>
+		  	<p>slider 视口宽度</p>
+		  	<kbd>int</kbd>
+		  	<code>可选,默认 1200px</code>
+		  </dd>
+		</dl>
+		<dl class="dl-horizontal">
+		  <dt>slider-height</dt>
+		  <dd>
+		  	<p>slider 视口高度</p>
+		  	<kbd>int</kbd>
+		  	<code>可选,默认 300px</code>
+		  </dd>
+		</dl>
+		<dl class="dl-horizontal">
+		  <dt>slider-items</dt>
+		  <dd>
+		  	<p>slider 每组滑动元素数量</p>
+		  	<kbd>int</kbd>
+		  	<code>可选,默认 1</code>
+		  </dd>
+		</dl>
+		<dl class="dl-horizontal">
+		  <dt>slider-direction</dt>
+		  <dd>
+		  	<p>slider 滑动方向</p>
+		  	<kbd>h, v (horizontal,vertical)</kbd>
+		  	<code>可选,默认 h</code>
+		  </dd>
+		</dl>
+		<dl class="dl-horizontal">
+		  <dt>slider-speed</dt>
+		  <dd>
+		  	<p>slider 滑动速度</p>
+		  	<kbd>int</kbd>
+		  	<code>可选,默认 500 ms</code>
+		  </dd>
+		</dl>
+		<dl class="dl-horizontal">
+		  <dt>slider-duration</dt>
+		  <dd>
+		  	<p>slider 滑动间隔</p>
+		  	<kbd>int</kbd>
+		  	<code>可选,默认 3000 ms</code>
+		  </dd>
+		</dl>
+		<dl class="dl-horizontal">
+		  <dt>slider-nav</dt>
+		  <dd>
+		  	<p>slider 控制点,缩略图</p>
+		  	<kbd>dots, thumb, false</kbd>
+		  	<code>可选,默认 dots</code>
+		  </dd>
+		</dl>
+		<dl class="dl-horizontal">
+		  <dt>slider-navcontrol</dt>
+		  <dd>
+		  	<p>slider 前后一张控制</p>
+		  	<kbd>true , false</kbd>
+		  	<code>可选,默认 true</code>
+		  </dd>
+		</dl>
+
+		<dl class="dl-horizontal">
+		  <dt>slider-navposLeft</dt>
+		  <dd>
+		  	<p>slider 控制箭头离左侧距离</p>
+		  	<kbd>int</kbd>
+		  	<code>可选,默认 0</code>
+		  </dd>
+		</dl>
+		<dl class="dl-horizontal">
+		  <dt>slider-navposRange</dt>
+		  <dd>
+		  	<p>slider 控制箭头之间距离</p>
+		  	<kbd>int</kbd>
+		  	<code>可选,默认 slider宽度</code>
+		  </dd>
+		</dl>
+
+	</div>
+
+
+	<div class="mui-example row">
+	<!--  DEMO  -->
+	<h3> 实例 <small> Example</small></h3>
+	<pre class="source-code pre-scrollable">
+&lt;div slider slider-fullwidth="true" slider-height="420"&gt;
+
+	&lt;div&gt;
+		&lt;a href="http://168haitao.com/topic.php?topic_id=64" src="/data/afficheimg/slideBanner_panel.jpg" target="_blank"&gt;&lt;/a&gt;
+		&lt;div caption&gt;&lt;/div&gt;
+	&lt;/div&gt;
+
+	&lt;div&gt;
+		&lt;a href="/zhuanti/hushoushuang/" src="/data/afficheimg/hushoushuang-slide.jpg" target="_blank"&gt;&lt;/a&gt;
+		&lt;div caption&gt;&lt;/div&gt;
+	&lt;/div&gt;
+	&lt;div&gt;
+		&lt;a href="http://168haitao.com/topic.php?topic_id=27" src="/data/afficheimg/slideBanner_pane2.jpg" target="_blank"&gt;&lt;/a&gt;
+		&lt;div caption&gt;&lt;/div&gt;
+	&lt;/div&gt;
+	&lt;div&gt;
+		&lt;a href="http://168haitao.com/brand.php?id=142" src="/data/afficheimg/jinghua1018.jpg" target="_blank"&gt;&lt;/a&gt;
+		&lt;div caption&gt;&lt;/div&gt;
+	&lt;/div&gt;
+
+
+&lt;/div&gt;
+
+	</pre>
+<div slider slider-fullwidth="true" slider-height="420">
+
+	<div>
+		<a href="http://168haitao.com/topic.php?topic_id=64" src="/data/afficheimg/slideBanner_panel.jpg" target="_blank"></a>
+		<div caption></div>
+	</div>
+
+	<div>
+		<a href="/zhuanti/hushoushuang/" src="/data/afficheimg/hushoushuang-slide.jpg" target="_blank"></a>
+		<div caption></div>
+	</div>
+	<div>
+		<a href="http://168haitao.com/topic.php?topic_id=27" src="/data/afficheimg/slideBanner_pane2.jpg" target="_blank"></a>
+		<div caption></div>
+	</div>
+	<div>
+		<a href="http://168haitao.com/brand.php?id=142" src="/data/afficheimg/jinghua1018.jpg" target="_blank"></a>
+		<div caption></div>
+	</div>
+
+
+</div>
+
+	</div>
+
+
+	</div>
+<!--  END slider  -->
+
+
+<div class="mui-type row" id="mui-dialog">
+
+
+	<div class="row">	
+		<h2>Dialog <small>对话框UI自动初始化</small></h2>
+		
+	</div>
+
+	<div class="row mui-doc">	
+		<!--  使用  -->
+		<h3> 使用 <small> Usage</small></h3>
+		<dl class="dl-horizontal">
+			<dt>全局调用</dt>
+			<dd><code>$(this).mui_dialog({obj, callback});</code></dd>
+		</dl>
+		<dl class="dl-horizontal">
+			<dt>DOM构成(至少)</dt>
+			<dd>
+<pre>
+&lt;a dialog href="interface.php"&gt;对话框链接&lt;/a&gt;
+</pre>
+			</dd>
+		</dl>
+
+		<!--  参数  -->
+		<h3> 参数设置 <small> Setting</small></h3>
+
+		<dl class="dl-horizontal">
+		  <dt>参数名</dt>
+		  <dd>值</dd>
+		</dl>
+		<dl class="dl-horizontal">
+		  <dt>dialog</dt>
+		  <dd>
+		  	<p>初始化属性，赋值可选，设置不同样式</p>
+		  	<kbd>a-z</kbd>
+		  	<code>必须</code>
+		  </dd>
+		</dl>
+		<dl class="dl-horizontal">
+		  <dt>dialog-selector</dt>
+		  <dd>
+		  	<p>静态数据内容选择器</p>
+		  	<kbd>string (jquery selector)</kbd>
+		  	<code>可选</code>
+		  </dd>
+		</dl>
+		<dl class="dl-horizontal">
+		  <dt>dialog-data</dt>
+		  <dd>
+		  	<p>对话框传递参数</p>
+		  	<kbd>object</kbd>
+		  	<code>可选</code>
+		  </dd>
+		</dl>
+
+		<dl class="dl-horizontal">
+		  <dt>dialog-width</dt>
+		  <dd>
+		  	<p>对话框宽度</p>
+		  	<kbd>int</kbd>
+		  	<code>可选，默认根据内容</code>
+		  </dd>
+		</dl>
+		<dl class="dl-horizontal">
+		  <dt>dialog-height</dt>
+		  <dd>
+		  	<p>对话框高度</p>
+		  	<kbd>int</kbd>
+		  	<code>可选，默认根据内容</code>
+		  </dd>
+		</dl>
+		<dl class="dl-horizontal">
+		  <dt>dialog-title</dt>
+		  <dd>
+		  	<p>对话框顶部title内容</p>
+		  	<kbd>string</kbd>
+		  	<code>可选，默认不显示</code>
+		  </dd>
+		</dl>
+		<dl class="dl-horizontal">
+		  <dt>dialog-speed</dt>
+		  <dd>
+		  	<p>对话框显示速度</p>
+		  	<kbd>int</kbd>
+		  	<code>可选，默认 500 ms</code>
+		  </dd>
+		</dl>
+
+
+	</div>
+
+
+	<div class="mui-example">
+	<!--  DEMO  -->
+	<h3> 实例 <small> Example</small></h3>
+	<pre class="source-code pre-scrollable">
+&lt;a href="mui.css" dialog&gt;dialog显示的链接&lt;a&gt;
+	</pre>
+
+	<a dialog dialog-title="test demo for dialog" href="mui.css">点我就出来dialog</a>
+
+
 
 	</div>
 
 
 
-	<div slider slider-fullwidth="true" slider-height="500" >
-		<!--  each DOM here is a slider item  -->
-		<div>
-			<a src="images/Avent.jpg" href="" target="_blank"></a>
-			<div caption>some caption here</div>
-		</div>
+</div>
 
-		<div>
-			<a src="images/Badger.jpg" href="" target="_blank"></a>
-			<div caption>some caption here</div>
-		</div>
 
-		<div>
-			<a src="images/Child-Life.jpg" href="" target="_blank"></a>
-			<div caption>some caption here</div>
-		</div>
 
-		<div>
-			<a src="images/Earth-Mama.jpg" href="" target="_blank"></a>
-			<div caption>some caption here</div>
-		</div>
-
-		<div>
-			<a src="images/Gerber.jpg" href="" target="_blank"></a>
-			<div caption>some caption here</div>
-		</div>
-
-		<div>
-			<a src="images/Nestle.jpg" href="" target="_blank"></a>
-			<div caption>some caption here</div>
-		</div>								
-
-	</div>
 
 </div>
 </body>

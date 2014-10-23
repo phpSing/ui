@@ -67,7 +67,7 @@
 		/* execute callbacks */
 		if ($.type(params.callback == 'function')) {
 			try {
-				params.callback();
+				params.callback(obj);
 			}catch(e) {
 				console.log(e);
 			}
@@ -189,12 +189,18 @@
 					left: ((o.navposleft+(o.navposRange/2)) - (o.outer.find('.mui-slider-dots-wrapper').outerWidth(true)/2)) + 'px'
 				});
 			}			
-		}
+		}/* 
 		if (o.fullwidth) {
+			recalculate width 
 			o.outer.css({
-				'overflow' : 'visible'
+				'width' : '100%'
 			});
-		}
+			o.group_width = o.outer.outerWidth(true);
+			o.item_width = o.outer.outerWidth(true)/o.items;
+			o.outer.find('.mui-slider-group').width(o.group_width);
+			o.outer.find('.mui-slider-item').width(o.item_width);
+			o.outer.find('.mui-slider-item-image').width(o.item_width);
+		}*/
 		/* DOM & CSS end */
 		/* bind events */
 		o.obj.mui_slider_events(o);
@@ -210,9 +216,9 @@
 					var slideMin = 0;
 					o.intervalEvent = setInterval(function(){
 						/* sliding */
-						var slideBaseRange = o.group_width;
+						o.slideBaseRange = o.group_width;
 						o.obj.animate({
-							left : '-' + currentSlide*slideBaseRange + 'px'
+							left : '-' + currentSlide*o.slideBaseRange + 'px'
 						},o.speed);
 						/* update index */
 						o.obj.data('updateStatus')(currentSlide);
@@ -234,9 +240,9 @@
 				o.timeoutEvent = undefined;
 				var to_group = parseInt(trigger_obj.attr('to-group'));
 				/* slide it */
-				var slideBaseRange = o.group_width;
+				o.slideBaseRange = o.group_width;
 				o.obj.animate({
-					left : '-' + to_group*slideBaseRange + 'px'
+					left : '-' + to_group*o.slideBaseRange + 'px'
 				},o.speed);
 				/* update index if it is nav control */
 				o.obj.data('updateStatus')(to_group);
@@ -285,6 +291,131 @@
 
 		return o.obj;
 	}
+	/* =====================================
+	*
+	*	UI components start
+	*	@Name: Dialog
+	*	@Usage: Auto-initialize DOM into dialog link
+	*
+	* ====================================== */
+	$.extend($.mui,{
+		dialog: {
+			target : 'mui-dialog-ref',
+			unique: true,
+			width: 'auto',
+			height: 'auto',
+			title: '',
+			selector: '',
+			data: {},
+			speed: 500,
+			lang: {
+				close: '关闭',
+				open: '打开'
+			}
+		}
+	});
+	$.fn.mui_dialog = function(params){
+		console.log('in dialog');
+		var obj = params.obj || this;
+		if (obj == undefined) return;
+		$(obj).find('[dialog]').each(function(i,dom){
+			var $dialog = $(dom);
+			if ($dialog.length < 1) return;
+			if (!$dialog.attr('dialog-inited')) {
+				$dialog.attr({
+					'dialog-inited' : 'true',
+					'dialog-target' : $.mui.dialog.target
+				});
+				$dialog.unbind().mui_dialoginit();
+			}
+		});
+		if ($.type(params.callback) == 'function' ) {
+			try{params.callback(obj)}catch(e){console.log(e);}
+		}
+		return obj;
+	}
+	$.fn.mui_dialoginit = function(){
+		var o = {
+			obj: $(this)
+		}
+		if (o.obj.length < 0) return;
+		/* settings */
+		o.theme = o.obj.attr('dialog') || 'a';
+		o.selector = o.obj.attr('selector') || $.mui.dialog.selector;
+		eval("o.dialog_data = " + o.obj.attr('dialog-data'));
+		o.width = o.obj.attr('dialog-width') || $.mui.dialog.width;
+		o.height = o.obj.attr('dialog-height') || $.mui.dialog.height;
+		o.title = o.obj.attr('dialog-title') || $.mui.dialog.title;
+		o.dataurl = o.obj.attr('href');
+		/* create dom ele */
+		o.dialog_mask = '<div class="mui-dialog-mask"></div>';
+		if (o.width != 'auto') {
+			o.width += 'px';
+		} 
+		if (o.height != 'auto') {
+			o.height += 'px';
+		}
+		o.dialog_box = '<div class="mui-dialog-wrapper" '+ $.mui.dialog.target +' style="width:'+o.width+';height:'+o.height+';">';
+		if (o.title != '') {
+			o.dialog_box += '<div class="mui-dialog-title">'+ o.title +'<span class="mui-dialog-close"></span></div>';
+		}
+		o.dialog_box += '<div class="mui-dialog-body"></div>';
+		o.dialog_box += '</div>';
+
+		/* start events */
+		o.obj.mui_dialogevents(o);
+		return o.obj;
+	}
+	$.fn.mui_dialogevents = function(o){
+		console.log('into events dialog');
+		o.dialog_box = $(o.dialog_box);
+		o.dialog_mask = $(o.dialog_mask);
+
+		o.obj.data({
+			open: function(fn){
+				if ($('[mui-dialog-ref]').length < 1) {
+					$('body').append(o.dialog_mask).append(o.dialog_box);	
+					/* loading in contents */
+					console.log(o.dataurl);
+					if (o.dataurl) {
+						$.post(o.dataurl, o.dialog_data, function(data, textStatus, xhr) {
+							/*optional stuff to do after success */
+							console.log(data);
+							o.dialog_box.find('.mui-dialog-body').html(data);
+						});
+					}
+					/* bind close event */
+					o.dialog_box.find('.mui-dialog-close').unbind().click(function(e){
+						o.obj.data('close')(function(){
+							console.log('im after dialog close');
+						});
+					});
+				}
+				/* callbacks */
+				if ($.type(fn) == 'function') {
+					try{fn(o.dialog_box);}catch(e){console.log(e);}
+				}
+			},
+			close: function(fn){
+				if ($('[mui-dialog-ref]').length == 1) { 
+					$('[mui-dialog-ref]').remove();
+					$('.mui-dialog-mask').remove();
+				}
+
+				/* callbacks */
+				if ($.type(fn) == 'function') {
+					try{fn(o.dialog_box);}catch(e){console.log(e);}
+				}			
+			}
+		});
+		/* bind events */
+		o.obj.unbind().click(function(e){
+			e.preventDefault();
+			o.obj.data('open')(function(obj){
+				console.log('im running after open');
+			});
+		});
+	}
 	/*
 	*
 	*	MUI execution
@@ -294,6 +425,14 @@
 		/* slider */
 		if ($.type($(this).mui_slider) == 'function') {
 			try{$(this).mui_slider({
+				callback: function(){
+					console.log('im done after everything');
+				}
+			});}catch(e){console.log(e);}
+		}
+		/* dialog */
+		if ($.type($(this).mui_dialog) == 'function') {
+			try{$(this).mui_dialog({
 				callback: function(){
 					console.log('im done after everything');
 				}

@@ -1,23 +1,32 @@
-/* DOC */
-.navigation {
-	& a:active,
-	& a:focus,
-	& a:hover {
-		transition: all ease .3s;
-		color: #fff;
-		background: #c7254e;
-	}
-	position: fixed;
-	top: 18em;
-	left: 1em;
-}
-/* common */
+/* layouts */
 @blue : #0082f0;
 .first-item {
 	margin-left: 0 !important;
 }
 .last-item {
 	margin-right: 0 !important;
+}
+/* common */
+.icon-loading {
+	width: 31px;
+	height: 31px;
+	background: url(images/loading.gif) top center no-repeat;
+}
+/* DOC */
+.mui-doc-wrapper{
+	padding-bottom: 300px;
+	.navigation {
+		& a:active,
+		& a:focus,
+		& a:hover {
+			transition: all ease .3s;
+			color: #fff;
+			background: #c7254e;
+		}
+		position: fixed;
+		top: 18em;
+		left: 1em;
+	}	
 }
 
 
@@ -120,10 +129,11 @@
 	border-radius: 5px;
 	box-shadow: 0 0 8px rgba(0,0,0,.5);
 	position: fixed;
+	overflow: scroll;
 	background: #fff;
 	z-index: 3000;
-	left: 35%;
-	top: 35%;
+	left: 0;
+	top: 15%;
 		.mui-dialog-title {
 			cursor: move;
 			font-size: 16px;
@@ -142,9 +152,50 @@
 		}
 		.mui-dialog-body {
 			padding: 10px 30px;
+			width: 100%;
 		}
 }
 
 
 
+
+
+/*
+*
+*	old version override
+*
+*/
+.top-nav .menu-item.current, .top-nav .menu-item.selected, .top-nav .menu-item:focus {
+	background: transparent !important;
+}
+.top-nav .nav-menu {
+	background: transparent !important;
+	a {
+		&:hover {
+			border-bottom: 2px solid #fff;
+		}
+		padding:3px 0;
+		color: #fff;
+		font-weight: lighter;
+	}
+}
+#user_header #user_control {
+	color: #000;
+	font-family: Microsoft YaHei, 宋体 !important;
+	a {
+		color: inherit;
+	}
+}
+.top-nav {
+	background: #0082f0 !important;
+}
+.header .user-search {
+	padding: 5px 0 !important;
+}
+.header-wrapper {
+	min-height: 248px !important;
+}
+.special-body .header-wrapper {
+	min-height: 236px !important;
+}
 

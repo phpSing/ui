@@ -1,4 +1,51 @@
 (function($,undefined){
+	function escQuit(){
+		var quitEle = [ /* elements to remove when type ESC */
+			'[mui-dialog-ref]',
+			'.mui-dialog-mask'
+		];
+		$(document).keyup(function(event) {
+			if (event.keyCode == 27) {
+				/* esc */
+				$.each(quitEle, function(index, val) {
+					 $(val).remove();
+				});
+			}
+		});
+	}
+	function draggable(drag_obj, drag_trigger) {
+		/* both params are css selectors */
+		var trigger = $(drag_trigger);
+		var drag_obj = drag_obj;
+		if (trigger.length < 1 || drag_obj.length < 1) {
+			return;
+		}
+		trigger.unbind('mousedown').mousedown(function(e){
+			var status = {};
+			status._x = e.clientX;
+			status._y = e.clientY;
+			/* get current pos of dragging elements */
+			status.drag_x = drag_obj.offset().left;
+			status.drag_y = drag_obj.offset().top;
+			trigger.unbind('mousemove').mousemove(function(e){
+				status.xdiff = e.clientX - status._x;
+				status.ydiff = e.clientY - status._y;
+				var new_x = status.drag_x + status.xdiff;
+				var  new_y = status.drag_y + status.ydiff;
+				//console.log(new_x + '.....'+ new_y);
+				/* update drag_obj pos */
+				drag_obj.offset({
+					top:new_y,
+					left:new_x
+				});
+			});
+			trigger.mouseup(function(){
+				trigger.unbind('mousemove');
+			});
+		});
+
+
+	}
 	/**
 	*
 	*	MUI Components
@@ -94,6 +141,7 @@
 		o.navcontrol = o.obj.attr('slider-navcontrol') || $.mui.slider.navcontrol;
 		o.fullwidth = o.obj.attr('slider-fullwidth') || $.mui.slider.fullwidth;
 		o.navcontrolimage = $.mui.slider.navcontrolimage;
+
 		if (o.obj.attr('slider-navcontrolimage')) {
 			eval("o.navcontrolimage = " + o.obj.attr('slider-navcontrolimage'));
 		}
@@ -209,6 +257,21 @@
 	/* child EVETNS & CALLBACKS function */
 	$.fn.mui_slider_events = function(o){
 		o.obj.data({
+			/*
+			*
+			*	Hover Pause Slider
+			*
+			*/
+			pause: function(fn){
+				clearInterval(o.intervalEvent);
+				o.intervalEvent = undefined;
+				try{fn(o);}catch(e){console.log(e);}
+			},
+			/*
+			*
+			*	Slider Interval Event
+			*
+			*/
 			slideInterval : function(fn){
 				if (o.intervalEvent == undefined) {
 					var currentSlide = 0;						
@@ -233,6 +296,11 @@
 					try{fn(o);}catch(e){console.log(e);}
 				}
 			},
+			/*
+			*
+			*	Single Slide Event
+			*
+			*/
 			slide: function(trigger_obj,fn){
 				clearInterval(o.intervalEvent);
 				o.intervalEvent = undefined; 
@@ -254,6 +322,11 @@
 				/* callbacks */
 				try{fn(o);}catch(e){console.log(e);}
 			},
+			/*
+			*
+			*	Update slider properties/status
+			*
+			*/
 			updateStatus : function(to_group){
 				/* attr */
 				var backTrigger = o.outer.find('.mui-slider-navcontrol-back');
@@ -286,9 +359,13 @@
 		slideTrigger.click(function(e){
 			o.obj.data('slide')($(this),function(){console.log('im callback click slide');});
 		});
-
-
-
+		/* user hover */
+		var slides = o.outer.find('.mui-slider-item');
+		slides.hover(function(){
+			o.obj.data('pause')();
+		},function(){
+			o.obj.data('slideInterval')();
+		});
 		return o.obj;
 	}
 	/* =====================================
@@ -341,12 +418,17 @@
 		if (o.obj.length < 0) return;
 		/* settings */
 		o.theme = o.obj.attr('dialog') || 'a';
-		o.selector = o.obj.attr('selector') || $.mui.dialog.selector;
+		o.selector = o.obj.attr('dialog-selector') || $.mui.dialog.selector;
 		eval("o.dialog_data = " + o.obj.attr('dialog-data'));
 		o.width = o.obj.attr('dialog-width') || $.mui.dialog.width;
 		o.height = o.obj.attr('dialog-height') || $.mui.dialog.height;
 		o.title = o.obj.attr('dialog-title') || $.mui.dialog.title;
 		o.dataurl = o.obj.attr('href');
+		o.maxwidth = 0.8 * $(window).width();
+		o.maxheight = 0.8 * $(window).height();
+		o.opentimes = 0;
+		console.log(o.maxheight);
+		o.windowwidth = $(window).width();
 		/* create dom ele */
 		o.dialog_mask = '<div class="mui-dialog-mask"></div>';
 		if (o.width != 'auto') {
@@ -355,11 +437,11 @@
 		if (o.height != 'auto') {
 			o.height += 'px';
 		}
-		o.dialog_box = '<div class="mui-dialog-wrapper" '+ $.mui.dialog.target +' style="width:'+o.width+';height:'+o.height+';">';
+		o.dialog_box = '<div class="mui-dialog-wrapper" '+ $.mui.dialog.target +'>';
 		if (o.title != '') {
 			o.dialog_box += '<div class="mui-dialog-title">'+ o.title +'<span class="mui-dialog-close"></span></div>';
 		}
-		o.dialog_box += '<div class="mui-dialog-body"></div>';
+		o.dialog_box += '<div class="mui-dialog-body"><div class="icon-loading"></div></div>';
 		o.dialog_box += '</div>';
 
 		/* start events */
@@ -370,41 +452,67 @@
 		console.log('into events dialog');
 		o.dialog_box = $(o.dialog_box);
 		o.dialog_mask = $(o.dialog_mask);
-
 		o.obj.data({
+			pos : function(fn){
+				/* positioning o.dialog_box */
+				/* we got the size of the content */
+				/* resize it due to max limitations*/
+				if (o.dialog_box.outerHeight(true) > o.maxheight) {
+					o.dialog_box.height(o.maxheight);
+				} 
+				if (o.dialog_box.outerWidth(true) > o.maxwidth) {
+					o.dialog_box.width(o.maxwidth);
+				}
+				var newLeft = (o.windowwidth - o.dialog_box.outerWidth(true)) / 2;
+				console.log(o.windowwidth + '    ' + o.dialog_box.outerWidth(true) + '  .  ' +  newLeft);
+				o.dialog_box.css({
+					'left' : newLeft + 'px'
+				});
+				/* make it draggable */
+				draggable(o.dialog_box, '.mui-dialog-title');
+			},
 			open: function(fn){
 				if ($('[mui-dialog-ref]').length < 1) {
-					$('body').append(o.dialog_mask).append(o.dialog_box);	
-					/* loading in contents */
-					console.log(o.dataurl);
-					if (o.dataurl) {
-						$.post(o.dataurl, o.dialog_data, function(data, textStatus, xhr) {
-							/*optional stuff to do after success */
-							console.log(data);
-							o.dialog_box.find('.mui-dialog-body').html(data);
-						});
-					}
+					$('body').append(o.dialog_mask)
+					.append(o.dialog_box);	
+					o.dialog_box.hide().fadeIn(200);
 					/* bind close event */
 					o.dialog_box.find('.mui-dialog-close').unbind().click(function(e){
 						o.obj.data('close')(function(){
 							console.log('im after dialog close');
 						});
 					});
+					o.dialog_box.bind('transitionend',function(){
+						console.log('trans');
+					});
+					/* loading in contents */
+					if (o.selector != '') {
+						var newContent = $(o.selector).html();
+						o.dialog_box.find('.mui-dialog-body').html(newContent);
+						o.obj.data('pos')();
+						
+					} else if (o.dataurl) {
+						$.post(o.dataurl, o.dialog_data, function(data, textStatus, xhr) {
+							/*optional stuff to do after success */
+							o.dialog_box.find('.mui-dialog-body').html(data);
+							o.obj.data('pos')();
+						});
+					}
 				}
+				/* open times */
+				console.log(o.opentimes);
+				o.opentimes += 1;
 				/* callbacks */
 				if ($.type(fn) == 'function') {
-					try{fn(o.dialog_box);}catch(e){console.log(e);}
+					try{fn(o);}catch(e){console.log(e);}
 				}
 			},
 			close: function(fn){
-				if ($('[mui-dialog-ref]').length == 1) { 
-					$('[mui-dialog-ref]').remove();
-					$('.mui-dialog-mask').remove();
-				}
-
+				o.dialog_box.remove();
+				o.dialog_mask.remove();
 				/* callbacks */
 				if ($.type(fn) == 'function') {
-					try{fn(o.dialog_box);}catch(e){console.log(e);}
+					try{fn(o);}catch(e){console.log(e);}
 				}			
 			}
 		});
@@ -422,6 +530,13 @@
 	*
 	*/
 	$(document).ready(function() {
+		/* general */
+		escQuit();
+		/*
+		*
+		*	UI
+		*
+		*/
 		/* slider */
 		if ($.type($(this).mui_slider) == 'function') {
 			try{$(this).mui_slider({

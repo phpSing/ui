@@ -1,22 +1,31 @@
-/* DOC */
-.navigation {
-  position: fixed;
-  top: 18em;
-  left: 1em;
-}
-.navigation a:active,
-.navigation a:focus,
-.navigation a:hover {
-  transition: all ease .3s;
-  color: #fff;
-  background: #c7254e;
-}
-/* common */
+/* layouts */
 .first-item {
   margin-left: 0 !important;
 }
 .last-item {
   margin-right: 0 !important;
+}
+/* common */
+.icon-loading {
+  width: 31px;
+  height: 31px;
+  background: url(images/loading.gif) top center no-repeat;
+}
+/* DOC */
+.mui-doc-wrapper {
+  padding-bottom: 300px;
+}
+.mui-doc-wrapper .navigation {
+  position: fixed;
+  top: 18em;
+  left: 1em;
+}
+.mui-doc-wrapper .navigation a:active,
+.mui-doc-wrapper .navigation a:focus,
+.mui-doc-wrapper .navigation a:hover {
+  transition: all ease .3s;
+  color: #fff;
+  background: #c7254e;
 }
 /* slider */
 .mui-slider-wrapper.a.h {
@@ -100,10 +109,11 @@
   border-radius: 5px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
   position: fixed;
+  overflow: scroll;
   background: #fff;
   z-index: 3000;
-  left: 35%;
-  top: 35%;
+  left: 0;
+  top: 15%;
 }
 .mui-dialog-wrapper .mui-dialog-title {
   cursor: move;
@@ -123,4 +133,45 @@
 }
 .mui-dialog-wrapper .mui-dialog-body {
   padding: 10px 30px;
+  width: 100%;
+}
+/*
+*
+*	old version override
+*
+*/
+.top-nav .menu-item.current,
+.top-nav .menu-item.selected,
+.top-nav .menu-item:focus {
+  background: transparent !important;
+}
+.top-nav .nav-menu {
+  background: transparent !important;
+}
+.top-nav .nav-menu a {
+  padding: 3px 0;
+  color: #fff;
+  font-weight: lighter;
+}
+.top-nav .nav-menu a:hover {
+  border-bottom: 2px solid #fff;
+}
+#user_header #user_control {
+  color: #000;
+  font-family: Microsoft YaHei, 宋体 !important;
+}
+#user_header #user_control a {
+  color: inherit;
+}
+.top-nav {
+  background: #0082f0 !important;
+}
+.header .user-search {
+  padding: 5px 0 !important;
+}
+.header-wrapper {
+  min-height: 248px !important;
+}
+.special-body .header-wrapper {
+  min-height: 236px !important;
 }
